@@ -62,7 +62,7 @@ exports.Client = ServerBase.extend({
   // checking on the database.
   checkVersion: function(connection) {
     var instance = this;
-    this.runQuery(connection, 'select version();').then(function(resp) {
+    return this.runQuery(connection, 'select version();').then(function(resp) {
       instance.version = /^PostgreSQL (.*?) /.exec(resp.rows[0].version)[1];
     });
   }
