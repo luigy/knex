@@ -105,7 +105,7 @@ exports.setLib = function(context) {
           parseResultDates(newData, localData);
         }
 
-        expect(localData).to.eql(newData);
+        expect(newData).to.eql(localData);
       });
 
 
