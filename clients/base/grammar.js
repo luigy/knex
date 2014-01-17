@@ -8,6 +8,7 @@
 // to keep the interface database agnostic.
 var _       = require('lodash');
 
+var Builder    = require('../../lib/builder').Builder;
 var Raw     = require('../../lib/raw').Raw;
 var Helpers = require('../../lib/helpers').Helpers;
 
@@ -34,7 +35,7 @@ exports.baseGrammar = {
     var cleaned = [];
     for (var i = 0, l = bindings.length; i < l; i++) {
       // if (bindings[i] == void 0) continue;
-      if (!bindings[i] || bindings[i]._source !== 'Raw') {
+      if (!bindings[i] || (bindings[i]._source !== 'Raw' && bindings[i]._source !== 'Builder')) {
         cleaned.push(bindings[i]);
       } else {
         push.apply(cleaned, bindings[i].bindings);
@@ -347,6 +348,9 @@ exports.baseGrammar = {
   },
 
   parameter: function(value) {
-    return (value instanceof Raw ? value.sql : '?');
+    if (value instanceof Builder) {
+      return '(' + value.toSql() + ')';
+    }
+    return (value instanceof Raw ? value.toSql() : '?');
   }
 };
